@@ -1,0 +1,80 @@
+services:
+
+  php:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    image: wordpress-unit:latest
+    environment:
+      COMPOSER_MEMORY_LIMIT: "-1"
+      COMPOSER_HOME: /home/www-data/.composer
+    container_name: "${COMPOSE_PROJECT_NAME}_php"
+    volumes:
+      - ../${CODE_BASE_DIR}:/var/www/html:z
+      # - ../scripts:/var/www/html/scripts:z
+      # - ../drush/.drushrc.php:/home/www-data/.drushrc.php:z # for linux `z` for mac `cache`
+      # - ../${COMPOSER_HOME_CACHE}:/home/www-data/.composer:z # for linux `z`
+      - ./90-mail.ini:/etc/php8/conf.d/90-mail.ini:z
+      # - ../sites:/var/www/html/web/sites:z
+    restart: always
+    networks:
+      - front
+    ports:
+      - "80:80"
+      
+  mysql:
+    image: mariadb:10.5.28
+    container_name: "${COMPOSE_PROJECT_NAME}_mysql"
+    volumes:
+      - ${DB_DATA_DIR}/${COMPOSE_PROJECT_NAME}_mysql:/var/lib/mysql:z
+    environment:
+      MYSQL_DATABASE: ${COMPOSE_PROJECT_NAME}
+      MYSQL_USER: ${COMPOSE_PROJECT_NAME}
+      MYSQL_PASSWORD: ${COMPOSE_PROJECT_NAME}
+      MYSQL_ROOT_PASSWORD: ${COMPOSE_PROJECT_NAME}
+      MYSQL_SSL_DISABLED: true
+    restart: always
+    networks:
+      - front
+    ports:
+      - "3307:3306"
+
+  # nodejs:
+  #   image: ${IMAGE_NODEJS}
+  #   container_name: "${COMPOSE_PROJECT_NAME}_nodejs"
+  #   working_dir: /app
+  #   volumes:
+  #     - ../${CODE_BASE_DIR}/web/themes/custom/${THEME_NAME}/components/timeline:/app
+  #   command: ["npm", "start"]
+  #   environment:
+  #     - NODE_ENV=development
+  #     # - NODE_OPTIONS=--openssl-legacy-provider
+  #   tty: true
+  #   networks:
+  #     - front
+  #   ports:
+  #     - "3000:3000"
+
+  # theme:
+  #   image: ${THEME_IMAGE_NODEJS}
+  #   container_name: "${COMPOSE_PROJECT_NAME}_theme"
+  #   working_dir: /app
+  #   volumes:
+  #     - ../${CODE_BASE_DIR}/web/themes/custom/${THEME_NAME}:/app
+  #   command: ["yarn", "start"] # or can be `gulp`
+  #   environment:
+  #     - NODE_ENV=development
+  #     # - NODE_OPTIONS=--openssl-legacy-provider
+  #   tty: true
+  #   networks:
+  #     - front
+  #   ports:
+  #     - "3001:3000"
+
+networks:
+  front:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: "${IPRANGE}"
