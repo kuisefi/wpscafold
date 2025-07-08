@@ -91,7 +91,6 @@ To stop and remove all containers:
 ```sh
 make down
 ```
-<<<<<<< HEAD
 
 ---
 
