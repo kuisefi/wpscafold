@@ -3,6 +3,7 @@
 .data
 .cache
 *._.DS_Store
+*.DS_Store
 # ---> Composer
 /backend/composer.phar
 /backend/vendor/
@@ -14,6 +15,7 @@
 #
 # Note: if you want to stage/commit WP core files
 # you can delete this whole section/until Configuration.
+/backend/web
 /backend/web/wp-admin/
 /backend/web/wp-content/index.php
 /backend/web/wp-content/languages

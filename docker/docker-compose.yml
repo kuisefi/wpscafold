@@ -4,29 +4,29 @@ services:
     build:
       context: ../
       dockerfile: docker/Dockerfile
-    image: wordpress-unit:latest
+    image: ${IMAGE_WP}
     environment:
       COMPOSER_MEMORY_LIMIT: "-1"
-      COMPOSER_HOME: /home/www-data/.composer
+      COMPOSER_HOME: /home/web-user/.composer
     container_name: "${COMPOSE_PROJECT_NAME}_php"
     volumes:
       - ../${CODE_BASE_DIR}:/var/www/html:z
       # - ../scripts:/var/www/html/scripts:z
-      # - ../drush/.drushrc.php:/home/www-data/.drushrc.php:z # for linux `z` for mac `cache`
-      # - ../${COMPOSER_HOME_CACHE}:/home/www-data/.composer:z # for linux `z`
+      - ../${COMPOSER_HOME_CACHE}:/home/web-user/.composer:z # for linux `z`
       - ./90-mail.ini:/etc/php8/conf.d/90-mail.ini:z
-      # - ../sites:/var/www/html/web/sites:z
     restart: always
     networks:
       - front
     ports:
       - "80:80"
+    depends_on:
+      - db
       
-  mysql:
+  db:
     image: mariadb:10.5.28
     container_name: "${COMPOSE_PROJECT_NAME}_mysql"
     volumes:
-      - ${DB_DATA_DIR}/${COMPOSE_PROJECT_NAME}_mysql:/var/lib/mysql:z
+      - ../${DB_DATA_DIR}/${COMPOSE_PROJECT_NAME}_mysql:/var/lib/mysql:z
     environment:
       MYSQL_DATABASE: ${COMPOSE_PROJECT_NAME}
       MYSQL_USER: ${COMPOSE_PROJECT_NAME}

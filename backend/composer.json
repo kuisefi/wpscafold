@@ -1,0 +1,35 @@
+{
+    "name": "gemmablack/wordpress_composer_starter",
+    "description": "WordPress Composer Starter repository for quick-starting WordPress projects",
+    "version": "1.0.0", 
+    "authors": [
+        {
+            "name": "Gemma Black",
+            "email": "gblackuk@gmail.com"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://wpackagist.org"
+        }
+    ],
+    "require": {
+        "johnpbloch/wordpress": "^6",
+        "wpackagist-plugin/wordpress-seo": "^25.4",
+        "wpackagist-theme/twentyseventeen": "^1.4"
+    },
+    "extra": {
+        "wordpress-install-dir": "web",
+        "installer-paths": {
+            "web/wp-content/plugins/{$name}": ["type:wordpress-plugin"],
+            "web/wp-content/themes/{$name}": ["type:wordpress-theme"]
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "johnpbloch/wordpress-core-installer": true,
+            "composer/installers": true
+        }
+    }
+}

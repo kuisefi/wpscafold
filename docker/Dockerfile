@@ -57,25 +57,16 @@ WORKDIR /var/www/html
 # Installing Composer (latest stable version)
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Switch to web-user for installing Composer & Drush
-USER web-user
-
-# Installing Drush (latest stable version)
-RUN composer global require drush/drush
-
-# Switch to web-user for installing Composer & Drush
-USER root
-
-RUN ln -s /var/www/html/vendor/bin/drush /usr/local/bin/drush
+# Installing WP-CLI (latest stable version)
+ADD https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar /usr/local/bin/wp
+RUN chmod 755 /usr/local/bin/wp && php /usr/local/bin/wp --info
 
 # Switch to web-user for installing Composer & Drush
 USER web-user
 
-# Set Drush to use /var/www/html
-# RUN echo 'alias drush="drush --root=/var/www/html"' >> ~/.bashrc
-
-# Ensure Drush is available system-wide
-# ENV PATH="/home/web-user/.composer/vendor/bin:$PATH"
+# Verify WP-CLI works for web-user
+# This command will run during the build process and fail if wp is not accessible or executable by web-user
+RUN wp --info
 
 # Copy the application files (assuming the local directory ./app contains the code)
 COPY backend /var/www/html
@@ -86,11 +77,9 @@ COPY docker/conf.json /var/lib/unit/conf.json
 # Switch back to root user for final setup
 USER root
 
-# Change ownership to web-user
-RUN chown -R web-user:web-group /var/www/html
-
-# Clearing Alpine cache after installation
-RUN rm -rf /var/cache/apk/*
+# Change ownership to web-user & learing Alpine cache after installation
+RUN chown -R web-user:web-group /var/www/html && \
+    chmod -R 755 /var/www/html
 
 # Opening the port
 EXPOSE 80
