@@ -1,5 +1,4 @@
-# wpscafold
-WordPress Scafold Container
+# WPScafold - WordPress Scafold Container
 
 to start docker containers
 
