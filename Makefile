@@ -38,7 +38,7 @@ php = docker compose exec -T --user $(CUID):$(CGID) php ${1}
 php-0 = docker compose exec -T --user 0:0 php ${1}
 
 ## Full site install from the scratch
-all: | provision back si hooksymlink info
+all: | provision back si hooksymlink info restart
 
 ## Provision enviroment
 provision:
@@ -136,3 +136,8 @@ dev:
 wp:
 	$(call php, $(filter-out "$@",$(MAKECMDGOALS)))
 	$(info "To pass arguments use double dash: "make wp -- -y"")
+
+## Restart all docker compose services
+restart:
+	@echo "Restarting containers for $(COMPOSE_PROJECT_NAME)"
+	docker compose restart
