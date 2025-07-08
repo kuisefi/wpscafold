@@ -243,6 +243,12 @@ Backup files will be created in the project root.
 - [PHP CodeSniffer for WordPress](https://github.com/WordPress/WordPress-Coding-Standards)
 - [Storybook](https://storybook.js.org/)
 
+
+---
+### Additional information:  
+https://www.liquidweb.com/wordpress/build/composer/  
+https://gist.github.com/gemmadlou/6fc40583318430f77eda54ebea91c2a1
+
 ---
 
 ## License
@@ -251,9 +257,3 @@ MIT License
 Copyright (c) 2025 Ivan F
 
 See [LICENSE](LICENSE) for details.
-
-Additional information:  
-https://www.liquidweb.com/wordpress/build/composer/  
-https://gist.github.com/gemmadlou/6fc40583318430f77eda54ebea91c2a1
-=======
->>>>>>> fd301bf74b9c4b31b4dcc06f4b974b3514bbd280
