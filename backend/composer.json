@@ -1,11 +1,10 @@
 {
-    "name": "gemmablack/wordpress_composer_starter",
+    "name": "wpengine/wpscafold",
     "description": "WordPress Composer Starter repository for quick-starting WordPress projects",
     "version": "1.0.0", 
     "authors": [
         {
-            "name": "Gemma Black",
-            "email": "gblackuk@gmail.com"
+            "name": "Ivan F"
         }
     ],
     "repositories": [
