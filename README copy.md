@@ -1,2 +1,0 @@
-# wpscafold
-WordPress Scafold Container
