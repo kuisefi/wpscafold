@@ -10,12 +10,12 @@ phpcswp = docker run --rm \
 
 ## Validate codebase with WordPress Coding Standards
 phpcs-wp:
-    @echo "WordPress Coding Standards validation..."
-    @$(call phpcswp, phpcs)
+	@echo "WordPress Coding Standards validation..."
+	@$(call phpcswp, phpcs)
 
 ## Auto-fix codebase according to WordPress standards
 phpcbf-wp:
-    @$(call phpcswp, phpcbf)
+	@$(call phpcswp, phpcbf)
 
 ## Add symbolic link from custom script(s) to .git/hooks/
 hooksymlink:

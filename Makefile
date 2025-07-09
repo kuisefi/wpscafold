@@ -134,8 +134,8 @@ dev:
 	@$(call php-0, chmod +w $(CODE_BASE_DIR)/web/wp-content)
 ## Run WP-CLI command in PHP container. To pass arguments use double dash: "make wp -- -y"
 wp:
-	$(call php, $(filter-out "$@",$(MAKECMDGOALS)))
-	$(info "To pass arguments use double dash: "make wp -- -y"")
+	$(call php, sh -c '$(filter-out "$@",$(MAKECMDGOALS))')
+	$(info "To pass arguments use double dash: "make wp --" ")
 
 ## Restart all docker compose services
 restart:

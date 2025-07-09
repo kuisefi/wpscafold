@@ -245,7 +245,7 @@ Backup files will be created in the project root.
 
 ---
 ### Additional information:  
-https://www.liquidweb.com/wordpress/build/composer/  
+https://gridpane.com/kb/useful-wp-cli-commands/
 https://gist.github.com/gemmadlou/6fc40583318430f77eda54ebea91c2a1
 
 ---
