@@ -3,7 +3,7 @@ FROM alpine:latest
 # Defining arguments
 ARG COMPOSER_HASH
 ARG DRUSH_VERSION
-ARG PHPV=82
+ARG PHPV=84
 ARG BUILD_DATE
 ARG VCS_REF
 
@@ -12,7 +12,7 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
   org.label-schema.vcs-ref=$VCS_REF \
   org.label-schema.schema-version="1.0" \
   org.label-schema.name="docker-php-prod" \
-  org.label-schema.description="Production-ready PHP 8.2 with Nginx Unit, Composer, and WordPress" \
+  org.label-schema.description="Production-ready PHP 8.4 with Nginx Unit, Composer, and WordPress" \
   org.label-schema.vcs-url="https://github.com/eneus" \
   maintainer="Ivan F <2290816+eneus@users.noreply.github.com>"
 
@@ -24,28 +24,43 @@ ENV PHPRUN_DEPS \
   openssh-client \
   patch \
   rsync \
-  sqlite
+  sqlite 
 
 # Update the system and install the necessary packages
 RUN set -eux; \
+  # First, install ca-certificates insecurely to fix the SSL issue
+  apk add --no-cache ca-certificates --no-check-certificate; \
   apk add --no-cache \
   unit unit-php${PHPV} \
-  php82 \
-  php82-brotli \
-  php82-pecl-apcu \
-  php82-pecl-igbinary \
-  php82-pecl-uploadprogress \
-  php82-bcmath php82-ctype php82-curl php82-dom php82-fileinfo \
-  php82-gd php82-gmp php82-iconv php82-mbstring php82-opcache \
-  php82-openssl php82-pcntl php82-pdo_mysql php82-pdo_sqlite \
-  php82-phar php82-session php82-simplexml php82-sqlite3 \
-  php82-tokenizer php82-xml php82-xmlreader php82-xmlwriter php82-zip \
-  php82-mysqli \
+  php${PHPV} \
+  php${PHPV}-brotli \
+  php${PHPV}-pecl-memcache \
+  php${PHPV}-pecl-apcu \
+  php${PHPV}-pecl-igbinary \
+  php${PHPV}-pecl-uploadprogress \
+  php${PHPV}-pecl-xdebug \
+  php${PHPV}-bcmath php${PHPV}-ctype php${PHPV}-curl php${PHPV}-dom php${PHPV}-fileinfo \
+  php${PHPV}-gd php${PHPV}-gmp php${PHPV}-iconv php${PHPV}-mbstring php${PHPV}-opcache \
+  php${PHPV}-openssl php${PHPV}-pcntl php${PHPV}-pdo_mysql php${PHPV}-pdo_sqlite \
+  php${PHPV}-phar php${PHPV}-session php${PHPV}-simplexml php${PHPV}-sqlite3 \
+  php${PHPV}-tokenizer php${PHPV}-xml php${PHPV}-xmlreader php${PHPV}-xmlwriter php${PHPV}-zip \
+  php${PHPV}-mysqli \
   mariadb-client \
   openssh-client \
   curl git make rsync patch openldap-clients unzip bash sqlite \
-  $PHPRUN_DEPS \
-  && ln -fs php82 /usr/bin/php
+  && ln -fs php${PHPV} /usr/bin/php
+
+# Add the Xdebug configuration file for Nginx Unit
+RUN echo "zend_extension=xdebug.so" > /etc/php${PHPV}/conf.d/50-xdebug.ini && \
+    echo "xdebug.mode=debug" >> /etc/php${PHPV}/conf.d/50-xdebug.ini && \
+    echo "xdebug.start_with_request=yes" >> /etc/php${PHPV}/conf.d/50-xdebug.ini && \
+    echo "xdebug.client_host=host.docker.internal" >> /etc/php${PHPV}/conf.d/50-xdebug.ini && \
+    echo "xdebug.log=/var/www/html/xdebug.log" >> /etc/php${PHPV}/conf.d/50-xdebug.ini
+
+# Add configuration to display errors
+RUN echo "display_errors = On" > /etc/php${PHPV}/conf.d/50-errors.ini && \
+    echo "error_reporting = E_ALL" >> /etc/php${PHPV}/conf.d/50-errors.ini
+
 
 # Create a user to run the server
 RUN addgroup -g 1000 -S web-group && \
