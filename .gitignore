@@ -10,7 +10,7 @@
 *xdebug.log
 *node_modules/
 /backend/web/themes/*/*.css.map
-.vscode
+
 # Core
 #
 # Note: if you want to stage/commit WP core files
