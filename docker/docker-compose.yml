@@ -4,6 +4,8 @@ services:
     build:
       context: ../
       dockerfile: docker/Dockerfile
+      args:
+        PHPV: ${PHPV}
     image: ${IMAGE_WP}
     environment:
       COMPOSER_MEMORY_LIMIT: "-1"
